@@ -26,7 +26,7 @@ public class Event {
 	private String lieu;
 	private int nbrPersonnes;
 	private String type;
-	private List<String> sponsor;
+	private String sponsor;
 	
 	//ManyToMany relationship ( participate )
 	@ManyToMany(mappedBy = "participatedEvents")
