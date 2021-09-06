@@ -9,6 +9,7 @@ import com.farfaouaSpring.IrfaneEvent.service.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,9 +77,34 @@ public class EventController {
             return null;
 
         }
+    }
+
+    // Delete an event
+    // /api/events/{id_user}/{id_event}/delete
+    @DeleteMapping("/{id_user}/{id_event}/delete")
+    public ResponseEntity<String> deleteEvent(@PathVariable long id_user,@PathVariable long id_event) {
+
+        // Get the user and the event
+        User user = userService.getUserByID(id_user);
+        Event event = eventService.getEventByID(id_event);
+
+        //Check if the user is the owner  
+        if (user.getId_user() == event.getCreatedBy().getId_user()) {
+
+            // Detach every user in the participation list
+            for (User participant : event.getParticipants()) {
+                participant.getCreatedEvents().remove(event);
+                participant.getParticipatedEvents().remove(event);
+            }
+
+            // Delete the event entity
+            return new ResponseEntity<String>(eventService.delete(event), HttpStatus.ACCEPTED) ;
 
 
+        } else {
 
+            return null;
 
+        }
     }
 }

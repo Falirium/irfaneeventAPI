@@ -11,6 +11,7 @@ public interface EventService {
     Event addEvent(Event newEvent);
     Event save(Event event);
     Event update(Event updatedEvent);
+    String delete(Event deletedEvent);
     
     
 }

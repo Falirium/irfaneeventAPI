@@ -48,5 +48,12 @@ public class EventServiceImpl implements EventService {
         
         return eventRepository.save(updatedEvent);
     }
+
+    @Override
+    public String delete(Event deletedEvent) {
+        // TODO Auto-generated method stub
+        eventRepository.delete(deletedEvent);
+        return "Deleted";
+    }
     
 }
