@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.Data;
 
 @Data
@@ -44,6 +47,7 @@ public class Event {
 	private List<User> participants;
 	
 	//ManyToOne relationship ( create )
+	///@JsonProperty(access = Access.WRITE_ONLY)
 	@ManyToOne
 	@JoinColumn(name = "createdBy", referencedColumnName = "id_user")
 	private User createdBy;

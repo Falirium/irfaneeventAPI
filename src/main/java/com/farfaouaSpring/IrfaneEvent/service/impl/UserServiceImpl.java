@@ -36,15 +36,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Event participate(Event event, User user) {
+    public User participate(Event event, User user) {
         // TODO Auto-generated method stub
-        return null;
+        List<Event> participatedEvents = user.getParticipatedEvents();
+        // Check whether the user is already participating
+        if (!participatedEvents.contains(event)) {
+            participatedEvents.add(event);
+            
+            user.setParticipatedEvents(participatedEvents);
+        }
+        
+        return userRepository.save(user);
     }
 
     @Override
     public String desister(Event event, User user) {
         // TODO Auto-generated method stub
-        return null;
+        List<User> participants = event.getParticipants();
+        // Check if the user exist
+        if (participants.contains(user)) {
+            participants.remove(user);
+            event.setParticipants(participants);
+            eventRepository.save(event);
+            return "Successfully participated";
+        } else {
+            return "Failed";
+        }
+
+        
     }
 
     @Override

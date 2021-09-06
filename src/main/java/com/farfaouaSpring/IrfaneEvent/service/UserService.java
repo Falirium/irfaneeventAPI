@@ -12,7 +12,7 @@ public interface UserService {
     User addUser(User newUser);
     List<User> getUsers();
     String authenticate(String username, String password);
-    Event participate(Event event, User user);
+    User participate(Event event, User user);
     String desister(Event event, User user);
     Event addEvent(Event newEvent);
     

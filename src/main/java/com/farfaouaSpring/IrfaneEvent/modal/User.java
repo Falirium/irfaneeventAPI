@@ -47,7 +47,8 @@ public class User {
 	
 	
 	//ManyToMany relationship ( participate )
-	@ManyToMany
+	@JsonProperty(access = Access.WRITE_ONLY)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name="user_event_participation",
 			joinColumns = @JoinColumn(name="id_user_participation" , referencedColumnName = "id_user"), 

@@ -1,12 +1,14 @@
 package com.farfaouaSpring.IrfaneEvent.controller;
 
 import java.lang.StackWalker.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.farfaouaSpring.IrfaneEvent.exception.ResourceNotFoundException;
 import com.farfaouaSpring.IrfaneEvent.modal.Event;
 import com.farfaouaSpring.IrfaneEvent.modal.User;
+import com.farfaouaSpring.IrfaneEvent.service.EventService;
 import com.farfaouaSpring.IrfaneEvent.service.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -24,9 +26,11 @@ public class UserController {
 
 
     private UserService userService;
+    private EventService eventService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
     }
     
     @GetMapping("/{name}")
@@ -50,6 +54,15 @@ public class UserController {
         User adminUser = userService.getUserByID(id_user);
 
         newEvent.setCreatedBy(adminUser);
+        // Add admin to the list of participants
+        List<User> participants = new ArrayList<User>();
+        participants.add(adminUser);
+
+        newEvent.setParticipants(participants);
+        
+
+        //Make this user a participants
+        //userService.participate(newEvent, adminUser);
         return new ResponseEntity<Event>(userService.addEvent(newEvent), HttpStatus.CREATED);
     }
 
@@ -64,6 +77,16 @@ public class UserController {
 
     // Participate to an event
     // /api/users/{id_user}/{id_event}/participate
+    @GetMapping("{id_user}/{id_event}/participate")
+    public ResponseEntity<User> participate(@PathVariable long id_user, @PathVariable long id_event) {
+        
+        // Get User and Event from the request
+        User selectedUser = userService.getUserByID(id_user);
+        Event selectedEvent = eventService.getEventByID(id_event);
+
+
+        return new ResponseEntity<User>(userService.participate(selectedEvent, selectedUser), HttpStatus.CREATED);
+    }
 
 
     // Desister from an event
