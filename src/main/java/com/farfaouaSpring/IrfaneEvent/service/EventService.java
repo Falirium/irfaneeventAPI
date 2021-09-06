@@ -9,6 +9,7 @@ public interface EventService {
     List<Event> getAllEvents();
     Event getEventByID(long id_event);
     Event addEvent(Event newEvent);
+    Event save(Event event);
     
     
 }

@@ -2,6 +2,7 @@ package com.farfaouaSpring.IrfaneEvent.service.impl;
 
 import java.util.List;
 
+import com.farfaouaSpring.IrfaneEvent.exception.ResourceNotFoundException;
 import com.farfaouaSpring.IrfaneEvent.modal.Event;
 import com.farfaouaSpring.IrfaneEvent.repository.EventRepository;
 import com.farfaouaSpring.IrfaneEvent.service.EventService;
@@ -26,7 +27,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getEventByID(long id_event) {
         // TODO Auto-generated method stub
-        return null;
+        return eventRepository.findById(id_event).orElseThrow(() -> new ResourceNotFoundException("event not found", "events", eventRepository));
     }
 
     @Override
@@ -34,5 +35,11 @@ public class EventServiceImpl implements EventService {
         // TODO Auto-generated method stub
         return eventRepository.save(newEvent);
     }
+
+	@Override
+	public Event save(Event event) {
+		// TODO Auto-generated method stub
+		return eventRepository.saveAndFlush(event);
+	}
     
 }

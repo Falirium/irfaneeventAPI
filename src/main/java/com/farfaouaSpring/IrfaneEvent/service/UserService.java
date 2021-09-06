@@ -10,10 +10,11 @@ public interface UserService {
 
     User getUserByID(long id);
     User addUser(User newUser);
+    User save(User user);
     List<User> getUsers();
     String authenticate(String username, String password);
-    User participate(Event event, User user);
-    String desister(Event event, User user);
+    Event participate(Event event, User user);
+    Event desister(Event event, User user);
     Event addEvent(Event newEvent);
     
     

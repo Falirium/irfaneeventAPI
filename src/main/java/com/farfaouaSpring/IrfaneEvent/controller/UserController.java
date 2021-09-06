@@ -2,8 +2,11 @@ package com.farfaouaSpring.IrfaneEvent.controller;
 
 import java.lang.StackWalker.Option;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import com.farfaouaSpring.IrfaneEvent.exception.ResourceNotFoundException;
 import com.farfaouaSpring.IrfaneEvent.modal.Event;
@@ -48,21 +51,26 @@ public class UserController {
 
     // Create an event
     // /api/users/{id_user}/create
+    
     @PostMapping("/{id_user}/create") 
     public ResponseEntity<Event> createEvent(@RequestBody Event newEvent, @PathVariable long id_user) {
-        //User adminUser = userService.getUserByID(Long.valueOf(id_user));
         User adminUser = userService.getUserByID(id_user);
 
+        
         newEvent.setCreatedBy(adminUser);
-        // Add admin to the list of participants
-        List<User> participants = new ArrayList<User>();
-        participants.add(adminUser);
-
-        newEvent.setParticipants(participants);
+        
+        adminUser.getParticipatedEvents().add(newEvent);
+        
+        //Event event = eventService.save(newEvent);
+        
+        //event.setParticipants(new ArrayList<User>(Arrays.asList(adminUser)));
+        
         
 
+        //System.out.println(newEvent.toString());
         //Make this user a participants
         //userService.participate(newEvent, adminUser);
+        
         return new ResponseEntity<Event>(userService.addEvent(newEvent), HttpStatus.CREATED);
     }
 
@@ -77,18 +85,27 @@ public class UserController {
 
     // Participate to an event
     // /api/users/{id_user}/{id_event}/participate
-    @GetMapping("{id_user}/{id_event}/participate")
-    public ResponseEntity<User> participate(@PathVariable long id_user, @PathVariable long id_event) {
+    @PostMapping("/{id_user}/{id_event}/participate")
+    public ResponseEntity<Event> participate(@PathVariable long id_user, @PathVariable long id_event) {
         
         // Get User and Event from the request
         User selectedUser = userService.getUserByID(id_user);
         Event selectedEvent = eventService.getEventByID(id_event);
 
 
-        return new ResponseEntity<User>(userService.participate(selectedEvent, selectedUser), HttpStatus.CREATED);
+        return new ResponseEntity<Event>(userService.participate(selectedEvent, selectedUser), HttpStatus.ACCEPTED);
     }
 
 
     // Desister from an event
     // /api/users/{id_user}/{id_event}/withdraw
+    @PostMapping("/{id_user}/{id_event}/withdraw")
+    public ResponseEntity<Event> withdraw(@PathVariable long id_user, @PathVariable long id_event) {
+        
+        // Get User and Event from the request
+        User selectedUser = userService.getUserByID(id_user);
+        Event selectedEvent = eventService.getEventByID(id_event);
+
+        return new ResponseEntity<Event>(userService.desister(selectedEvent, selectedUser), HttpStatus.ACCEPTED);
+    }
 }

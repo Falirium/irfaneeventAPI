@@ -1,5 +1,6 @@
 package com.farfaouaSpring.IrfaneEvent.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,33 +37,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User participate(Event event, User user) {
+    public Event participate(Event event, User user) {
         // TODO Auto-generated method stub
-        List<Event> participatedEvents = user.getParticipatedEvents();
-        // Check whether the user is already participating
-        if (!participatedEvents.contains(event)) {
-            participatedEvents.add(event);
-            
-            user.setParticipatedEvents(participatedEvents);
-        }
+        user.getParticipatedEvents().add(event);
+        event.setNbrPersonnes(event.getNbrPersonnes()-1);
         
-        return userRepository.save(user);
+        return eventRepository.save(event);
     }
 
     @Override
-    public String desister(Event event, User user) {
+    public Event desister(Event event, User user) {
         // TODO Auto-generated method stub
-        List<User> participants = event.getParticipants();
-        // Check if the user exist
-        if (participants.contains(user)) {
-            participants.remove(user);
-            event.setParticipants(participants);
-            eventRepository.save(event);
-            return "Successfully participated";
-        } else {
-            return "Failed";
-        }
+        user.getParticipatedEvents().remove(event);
+        event.setNbrPersonnes(event.getNbrPersonnes()+1);
 
+        return eventRepository.save(event);
         
     }
 
@@ -75,6 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Event addEvent(Event newEvent) {
         // TODO Auto-generated method stub
+    	
         return eventRepository.save(newEvent);
     }
 
@@ -83,5 +73,11 @@ public class UserServiceImpl implements UserService {
         // TODO Auto-generated method stub
         return userRepository.findAll();
     }
+
+	@Override
+	public User save(User user) {
+		// TODO Auto-generated method stub
+		return userRepository.save(user);
+	}
     
 }
