@@ -1,6 +1,7 @@
 package com.farfaouaSpring.IrfaneEvent.controller;
 
 import java.lang.StackWalker.Option;
+import java.util.List;
 import java.util.Optional;
 
 import com.farfaouaSpring.IrfaneEvent.exception.ResourceNotFoundException;
@@ -33,9 +34,16 @@ public class UserController {
         return "Welcome " + name;
     }
 
+    // Get all users
+    // /api/users
+    @GetMapping()
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<List<User>>(userService.getUsers(), HttpStatus.CREATED); 
+    }
+
 
     // Create an event
-    // /api/user/create
+    // /api/users/{id_user}/create
     @PostMapping("/{id_user}/create") 
     public ResponseEntity<Event> createEvent(@RequestBody Event newEvent, @PathVariable long id_user) {
         //User adminUser = userService.getUserByID(Long.valueOf(id_user));
@@ -52,4 +60,12 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User newUser) {
         return new ResponseEntity<User>(userService.addUser(newUser), HttpStatus.CREATED);
     }
+
+
+    // Participate to an event
+    // /api/users/{id_user}/{id_event}/participate
+
+
+    // Desister from an event
+    // /api/users/{id_user}/{id_event}/withdraw
 }

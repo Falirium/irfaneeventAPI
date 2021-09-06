@@ -1,5 +1,6 @@
 package com.farfaouaSpring.IrfaneEvent.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.farfaouaSpring.IrfaneEvent.exception.ResourceNotFoundException;
@@ -56,6 +57,12 @@ public class UserServiceImpl implements UserService {
     public Event addEvent(Event newEvent) {
         // TODO Auto-generated method stub
         return eventRepository.save(newEvent);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        // TODO Auto-generated method stub
+        return userRepository.findAll();
     }
     
 }
