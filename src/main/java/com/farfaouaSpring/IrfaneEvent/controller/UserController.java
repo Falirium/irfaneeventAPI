@@ -56,20 +56,9 @@ public class UserController {
     public ResponseEntity<Event> createEvent(@RequestBody Event newEvent, @PathVariable long id_user) {
         User adminUser = userService.getUserByID(id_user);
 
-        
         newEvent.setCreatedBy(adminUser);
         
         adminUser.getParticipatedEvents().add(newEvent);
-        
-        //Event event = eventService.save(newEvent);
-        
-        //event.setParticipants(new ArrayList<User>(Arrays.asList(adminUser)));
-        
-        
-
-        //System.out.println(newEvent.toString());
-        //Make this user a participants
-        //userService.participate(newEvent, adminUser);
         
         return new ResponseEntity<Event>(userService.addEvent(newEvent), HttpStatus.CREATED);
     }
@@ -108,4 +97,7 @@ public class UserController {
 
         return new ResponseEntity<Event>(userService.desister(selectedEvent, selectedUser), HttpStatus.ACCEPTED);
     }
+
+    // Modify an event
+    // /api/users/{id_user}/
 }

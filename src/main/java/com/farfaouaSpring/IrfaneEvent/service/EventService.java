@@ -10,6 +10,7 @@ public interface EventService {
     Event getEventByID(long id_event);
     Event addEvent(Event newEvent);
     Event save(Event event);
+    Event update(Event updatedEvent);
     
     
 }

@@ -41,5 +41,12 @@ public class EventServiceImpl implements EventService {
 		// TODO Auto-generated method stub
 		return eventRepository.saveAndFlush(event);
 	}
+
+    @Override
+    public Event update(Event updatedEvent) {
+        // TODO Auto-generated method stub
+        
+        return eventRepository.save(updatedEvent);
+    }
     
 }
